@@ -1,0 +1,13 @@
+[Unit]
+Description=OpenTAXII web server
+After=network.target
+
+[Service]
+ExecStart=/opt/opentaxii/bin/gunicorn 'opentaxii.http:app' -b localhost:9000
+User=opentaxii
+Restart=always
+RestartSec=15s
+TimeoutSec=10s
+
+[Install]
+WantedBy=multi-user.target
