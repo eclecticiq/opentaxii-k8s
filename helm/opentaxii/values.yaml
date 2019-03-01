@@ -4,8 +4,8 @@
 replicaCount: 1
 
 image:
-  repository: eclecticiq/opentaxii
-  tag: latest
+  repository: artifactory.app.eiq.sh/docker/eiq-opentaxii
+  tag: none
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -56,3 +56,21 @@ tolerations: []
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
 affinity: {}
+
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
