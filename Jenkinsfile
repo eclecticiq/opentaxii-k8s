@@ -1,4 +1,4 @@
-
+#!/usr/bin/groovy
 /*
  Pipeline to deploy opentaxii to Kubernetes cluster using Helm packages (CI/CDish)
  1. definition of pod template ( docker, helm)
@@ -25,17 +25,23 @@ def tag_image (branch){
   return [tag, version]  
 }  
 
-
 def label = "pod_Build_${BUILD_NUMBER}"
 podTemplate(label: label, containers: [
 
   containerTemplate(name: 'docker', image: 'docker:latest', command: 'cat', ttyEnabled: true),
-  containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.13.0', command: 'cat', ttyEnabled: true)
+  containerTemplate(name: 'helm', image: "lachlanevenson/k8s-helm:${params.HELM_VERSION}", command: 'cat', ttyEnabled: true)
 ],
 volumes: [
   hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
  
 ]) {
+  
+  properties(
+    [
+      parameters(
+        [ string(name: 'HELM_VERSION', description: 'Version of helm docker image', defaultValue: "")])]
+  )      
+
   node(label) {
 
     def PACKAGE = "opentaxii"
