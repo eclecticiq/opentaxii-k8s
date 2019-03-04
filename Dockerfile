@@ -1,5 +1,7 @@
-FROM python:3.6-stretch AS build
-LABEL maintainer="EclecticIQ <opentaxii@eclecticiq.com>"
+# FROM python:3.6-stretch AS build
+# LABEL maintainer="EclecticIQ <opentaxii@eclecticiq.com>"
+FROM python:3.6-stretch
+
 
 RUN python3 -m venv /opt/opentaxii && /opt/opentaxii/bin/pip install -U pip setuptools
 
@@ -10,9 +12,9 @@ COPY . /opentaxii
 RUN /opt/opentaxii/bin/pip install /opentaxii
 
 
-FROM python:3.6-slim-stretch AS prod
-LABEL maintainer="EclecticIQ <opentaxii@eclecticiq.com>"
-COPY --from=build /opt/opentaxii /opt/opentaxii
+# FROM python:3.6-slim-stretch AS prod
+# LABEL maintainer="EclecticIQ <opentaxii@eclecticiq.com>"
+# COPY --from=build /opt/opentaxii /opt/opentaxii
 
 RUN mkdir /data /input
 VOLUME ["/data", "/input"]
@@ -29,9 +31,9 @@ CMD ["/opt/opentaxii/bin/gunicorn", "opentaxii.http:app", "--workers=2", \
 
 
 # TODO: update once bugs in 1.11 are fixed
-FROM eclecticiq/package:1.10.2 AS pkg
-COPY ./packaging ./
-COPY --from=prod --chown=package:package /opt/opentaxii /opt/opentaxii
-ARG VERSION=0.0.0
-ARG ITERATION=1
-RUN VERSION=$VERSION ITERATION=$ITERATION ./build.sh
+# FROM eclecticiq/package:1.10.2 AS pkg
+# COPY ./packaging ./
+# COPY --from=prod --chown=package:package /opt/opentaxii /opt/opentaxii
+# ARG VERSION=0.0.0
+# ARG ITERATION=1
+# RUN VERSION=$VERSION ITERATION=$ITERATION ./build.sh
