@@ -4,7 +4,7 @@
 replicaCount: 1
 
 image:
-  repository: artifactory.app.eiq.sh/docker/eiq-opentaxii
+  repository: eclecticiq/opentaxii
   tag: none
   pullPolicy: IfNotPresent
 
